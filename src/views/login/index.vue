@@ -42,7 +42,7 @@ const submitForm = async () => {
     loading.value = true
 
     // 使用Supabase登录
-    const { data, error } = await supabase.auth.signInWithPassword({
+    const { data: _data, error } = await supabase.auth.signInWithPassword({
       email: loginForm.email,
       password: loginForm.password
     })
