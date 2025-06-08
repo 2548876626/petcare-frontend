@@ -43,8 +43,7 @@ const routes: Array<RouteRecordRaw> = [
     }
   },
   
-  /*
-
+  // 用户认证相关路由
   {
     path: '/login',
     name: 'Login',
@@ -65,6 +64,8 @@ const routes: Array<RouteRecordRaw> = [
       requireAuth: false
     }
   },
+  
+  /*
   {
     path: '/pet-owner',
     name: 'PetOwner',
@@ -191,7 +192,6 @@ const routes: Array<RouteRecordRaw> = [
       }
     ]
   },
-
   */
 
   {

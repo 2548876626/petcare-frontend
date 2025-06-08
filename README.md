@@ -1,18 +1,17 @@
-# 宠爱社区前端项目
+# 宠爱社区前端 (PetCare Frontend)
 
-这是宠爱社区（PetCare Community）的前端项目，一个社区化宠物托管服务平台。
+宠爱社区（PetCare Community）前端应用，提供宠物托管平台的Web界面。
 
 ## 技术栈
 
-- Vue 3 (使用 Composition API, `<script setup>`)
+- Vue 3
 - TypeScript
-- Pinia (状态管理)
-- Vue Router (路由)
-- Element Plus (UI库)
-- Axios (HTTP请求)
-- Vite (构建工具)
+- Vue Router
+- Pinia
+- Element Plus
+- Vite
 
-## 开发环境设置
+## 本地开发
 
 ### 前提条件
 
@@ -27,6 +26,18 @@ npm install
 yarn install
 ```
 
+### 配置环境变量
+
+1. 复制环境变量示例文件
+```bash
+cp .env.example .env.development
+```
+
+2. 编辑 `.env.development` 文件，配置API地址：
+```
+VITE_API_BASE_URL=http://localhost:8080
+```
+
 ### 启动开发服务器
 
 ```bash
@@ -35,54 +46,67 @@ npm run dev
 yarn dev
 ```
 
-### 构建生产版本
+## 生产部署 (Netlify)
 
-```bash
-npm run build
-# 或
-yarn build
-```
+### 部署步骤
 
-## 部署
+1. 在 [Netlify](https://www.netlify.com/) 上创建一个账户（如果你还没有）
+2. 使用GitHub账户登录Netlify
+3. 点击"New site from Git"按钮
+4. 选择GitHub作为Git提供商
+5. 授权Netlify访问你的GitHub仓库
+6. 选择你的宠爱社区前端仓库
+7. 配置以下设置:
+   - **Build command**: `npm run build`
+   - **Publish directory**: `dist`
+   - **Advanced build settings**: 添加环境变量 `VITE_API_BASE_URL` 并设置为你的Render后端URL
 
-该项目配置为可以直接部署到Netlify。只需将仓库连接到Netlify，它将自动检测并使用项目根目录下的`netlify.toml`配置。
+### 环境变量配置
 
-### Netlify部署步骤
+在Netlify的站点设置 > Build & deploy > Environment > Environment variables 中，添加以下环境变量:
 
-1. 在[Netlify](https://app.netlify.com/)注册账号并登录
-2. 点击"New site from Git"
-3. 选择你的Git提供商(GitHub, GitLab等)
-4. 选择此项目的仓库
-5. 构建设置将自动从`netlify.toml`中获取
-6. 点击"Deploy site"
+- `VITE_API_BASE_URL`: 你的Render后端URL，例如`https://petcare-api.onrender.com`
+
+### 自动部署
+
+配置好后，每当你推送新代码到GitHub仓库的主分支时，Netlify将自动构建和部署你的应用。
+
+### 配置自定义域名 (可选)
+
+1. 在Netlify控制面板中，进入你的站点设置
+2. 点击"Domain settings"
+3. 点击"Add custom domain"
+4. 按照指引配置你的自定义域名
+
+## 功能特性
+
+- 响应式设计，适配各种屏幕尺寸
+- 用户注册和登录
+- 宠物信息管理
+- 托管服务浏览和预约
+- 服务提供者管理面板
+- 评价和反馈系统
 
 ## 项目结构
 
 ```
-petcare-frontend/
-├── public/            # 静态资源
-├── src/
-│   ├── api/           # API请求
-│   ├── assets/        # 项目资源文件
-│   ├── components/    # 可复用组件
-│   ├── hooks/         # 自定义hooks
-│   ├── router/        # 路由配置
-│   ├── store/         # Pinia状态管理
-│   ├── utils/         # 工具函数
-│   ├── views/         # 页面视图
-│   ├── App.vue        # 根组件
-│   └── main.ts        # 应用入口
-├── index.html         # HTML模板
-├── tsconfig.json      # TypeScript配置
-├── vite.config.ts     # Vite配置
-└── netlify.toml       # Netlify部署配置
+src/
+├── api/          # API请求封装
+├── assets/       # 静态资源
+├── components/   # 通用组件
+├── composables/  # 组合式函数
+├── layouts/      # 页面布局
+├── router/       # 路由配置
+├── stores/       # 状态管理
+├── styles/       # 全局样式
+├── types/        # TypeScript类型定义
+├── utils/        # 工具函数
+└── views/        # 页面组件
 ```
 
-## 功能
+## 浏览器兼容性
 
-- 用户认证和授权
-- 宠物托管服务浏览和预订
-- 宠物信息管理
-- 服务提供者管理
-- 实时消息通知
-- 评价和评分系统 
+- Chrome (最新)
+- Firefox (最新)
+- Safari (最新)
+- Edge (最新) 

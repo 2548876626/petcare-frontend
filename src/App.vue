@@ -68,8 +68,8 @@ const showRegister = () => {
         </el-menu>
         
         <div class="auth-buttons">
-          <el-button @click="showLogin">登录</el-button>
-          <el-button type="primary" @click="showRegister">注册</el-button>
+          <el-button @click="router.push('/login')">登录</el-button>
+          <el-button type="primary" @click="router.push('/register')">注册</el-button>
         </div>
       </div>
     </header>
@@ -119,7 +119,7 @@ const showRegister = () => {
             <el-input type="password" placeholder="请输入密码"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" style="width: 100%">登录</el-button>
+            <el-button type="primary" style="width: 100%" @click="loginDrawer = false; router.push('/login')">登录</el-button>
           </el-form-item>
           <div class="form-footer">
             <p>还没有账号？ <a @click="loginDrawer = false; registerDrawer = true">立即注册</a></p>
@@ -151,7 +151,7 @@ const showRegister = () => {
             </el-radio-group>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" style="width: 100%">注册</el-button>
+            <el-button type="primary" style="width: 100%" @click="registerDrawer = false; router.push('/register')">注册</el-button>
           </el-form-item>
           <div class="form-footer">
             <p>已有账号？ <a @click="registerDrawer = false; loginDrawer = true">立即登录</a></p>

@@ -8,4 +8,20 @@
 [[redirects]]
   from = "/*"
   to = "/index.html"
-  status = 200 
+  status = 200
+
+# 开发环境代理设置（可选）
+#[[redirects]]
+#  from = "/api/*"
+#  to = "http://localhost:8080/api/:splat"
+#  status = 200
+#  force = true
+#  headers = {X-From = "Netlify"}
+#  conditions = {Role = ["admin"]}
+
+# 生产环境下的API代理（部署时取消注释并更改为你的Render后端URL）
+#[[redirects]]
+#  from = "/api/*"
+#  to = "https://your-backend-name.onrender.com/api/:splat"
+#  status = 200
+#  force = true 
