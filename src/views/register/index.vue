@@ -2,7 +2,7 @@
 import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
-import api from '@/api'
+import supabase from '@/lib/supabaseClient'
 
 const router = useRouter()
 
@@ -15,43 +15,6 @@ const registerForm = reactive({
   phone: '',
   role: 'PET_OWNER' // 默认为宠物主人
 })
-
-// 表单校验规则
-const rules = {
-  name: [
-    { required: true, message: '请输入用户名', trigger: 'blur' },
-    { min: 2, max: 20, message: '用户名长度在2到20个字符之间', trigger: 'blur' }
-  ],
-  email: [
-    { required: true, message: '请输入邮箱地址', trigger: 'blur' },
-    { type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur' }
-  ],
-  password: [
-    { required: true, message: '请输入密码', trigger: 'blur' },
-    { min: 6, message: '密码长度至少为6个字符', trigger: 'blur' }
-  ],
-  confirmPassword: [
-    { required: true, message: '请再次输入密码', trigger: 'blur' },
-    {
-      validator: (rule: any, value: string, callback: Function) => {
-        if (value !== registerForm.password) {
-          callback(new Error('两次输入的密码不一致'))
-        } else {
-          callback()
-        }
-      },
-      trigger: 'blur'
-    }
-  ],
-  phone: [
-    { required: false, message: '请输入手机号码', trigger: 'blur' },
-    {
-      pattern: /^1[3-9]\d{9}$/,
-      message: '请输入正确的手机号码',
-      trigger: 'blur'
-    }
-  ]
-}
 
 // 表单引用
 const formRef = ref()
@@ -71,10 +34,24 @@ const submitForm = async () => {
     loading.value = true
 
     // 准备提交的数据（不包含确认密码字段）
-    const { confirmPassword, ...submitData } = registerForm
+    const { confirmPassword, ...userData } = registerForm
 
-    // 发送注册请求
-    const response = await api.post('/api/auth/register', submitData)
+    // 使用Supabase注册用户
+    const { data, error } = await supabase.auth.signUp({
+      email: userData.email,
+      password: userData.password,
+      options: {
+        data: {
+          name: userData.name,
+          phone: userData.phone,
+          role: userData.role
+        }
+      }
+    })
+
+    if (error) {
+      throw error
+    }
 
     // 注册成功
     ElMessage({
@@ -88,25 +65,10 @@ const submitForm = async () => {
     }, 1500)
   } catch (error: any) {
     // 注册失败
-    if (error.response) {
-      // 服务器返回错误
-      ElMessage({
-        type: 'error',
-        message: error.response.data.message || '注册失败，请稍后再试'
-      })
-    } else if (error.message) {
-      // 表单验证错误
-      ElMessage({
-        type: 'warning',
-        message: error.message
-      })
-    } else {
-      // 其他错误
-      ElMessage({
-        type: 'error',
-        message: '注册失败，请检查网络连接'
-      })
-    }
+    ElMessage({
+      type: 'error',
+      message: error.message || '注册失败，请稍后再试'
+    })
   } finally {
     // 无论成功失败，都取消加载状态
     loading.value = false
@@ -137,7 +99,6 @@ const goToLogin = () => {
       <el-form
         ref="formRef"
         :model="registerForm"
-        :rules="rules"
         label-position="top"
         class="register-form"
       >
@@ -258,4 +219,4 @@ const goToLogin = () => {
     padding: 20px;
   }
 }
-</style> 
+</style>

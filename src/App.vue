@@ -29,6 +29,7 @@ const handleSelect = (key: string) => {
   }
 }
 
+/*
 // 显示登录抽屉
 const showLogin = () => {
   loginDrawer.value = true
@@ -39,6 +40,7 @@ const showRegister = () => {
   registerDrawer.value = true
 }
 </script>
+*/
 
 <template>
   <div class="app-container">

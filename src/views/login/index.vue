@@ -2,7 +2,7 @@
 import { ref, reactive } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { ElMessage } from 'element-plus'
-import api from '@/api'
+import supabase from '@/lib/supabaseClient'
 
 const router = useRouter()
 const route = useRoute()
@@ -41,42 +41,31 @@ const submitForm = async () => {
     // 设置加载状态
     loading.value = true
 
-    // 发送登录请求
-    const response = await api.post('/api/auth/login', loginForm)
+    // 使用Supabase登录
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: loginForm.email,
+      password: loginForm.password
+    })
+
+    if (error) {
+      throw error
+    }
 
     // 登录成功
     ElMessage({
       type: 'success',
       message: '登录成功！'
     })
-
-    // 保存token到本地存储
-    localStorage.setItem('token', response.token)
     
     // 重定向到之前想要访问的页面或首页
     const redirectPath = route.query.redirect ? route.query.redirect.toString() : '/'
     router.push(redirectPath)
   } catch (error: any) {
     // 登录失败
-    if (error.response) {
-      // 服务器返回错误
-      ElMessage({
-        type: 'error',
-        message: error.response.data.message || '登录失败，请稍后再试'
-      })
-    } else if (error.message) {
-      // 表单验证错误
-      ElMessage({
-        type: 'warning',
-        message: error.message
-      })
-    } else {
-      // 其他错误
-      ElMessage({
-        type: 'error',
-        message: '登录失败，请检查网络连接'
-      })
-    }
+    ElMessage({
+      type: 'error',
+      message: error.message || '登录失败，请检查邮箱和密码'
+    })
   } finally {
     // 无论成功失败，都取消加载状态
     loading.value = false
