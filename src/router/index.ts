@@ -42,6 +42,9 @@ const routes: Array<RouteRecordRaw> = [
       requireAuth: false
     }
   },
+  
+  /*
+
   {
     path: '/login',
     name: 'Login',
@@ -188,6 +191,9 @@ const routes: Array<RouteRecordRaw> = [
       }
     ]
   },
+
+  */
+
   {
     path: '/:pathMatch(.*)',
     name: 'NotFound',
@@ -206,7 +212,7 @@ const router = createRouter({
 })
 
 // 路由守卫
-router.beforeEach((to, from, next) => {
+router.beforeEach((to, _from, next) => {
   // 设置页面标题
   document.title = `${to.meta.title} | 宠爱社区`
   
